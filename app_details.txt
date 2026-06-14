@@ -1,0 +1,123 @@
+1. Purpose of Our App
+   We are grabbing the best delivery blocks for you — tailored perfectly for your preferences.
+
+   1. Maximize earnings
+   2. Save time
+   3. Drive smarter
+
+2. Flow of the App
+
+   1. Login
+      Connect your preferred delivery service directly within the app.
+
+   2. Filters
+      Tailor your search based on your ideal:
+
+      * Dates
+      * Times
+      * Locations
+      * Wages (optional / future scope)
+
+   3. Start
+      Once the user clicks the Start button, our system begins searching for delivery blocks in the background.
+
+      We continuously refresh the APIs that provide available delivery blocks, filter them based on user preferences, and automatically grab the best matching blocks for the user.
+
+      * Main Key Point:
+        We charge a small fee for every successfully grabbed block (example: $9), so we also need to implement a wallet system within the app.
+
+3. Smart AI Tapper
+
+   We are building advanced AI-powered technology that constantly refreshes the delivery app and grabs the best suitable blocks for users within milliseconds (~50ms target speed).
+
+   Since captchas may appear during the process, we also need to focus on handling them properly because they can sometimes become frustrating for users.
+
+   Current Focus:
+   Right now, we are focusing only on Amazon Flex as the primary service provider.
+
+   FAQ — What is Amazon Flex?
+
+   Amazon Flex is a delivery platform used by delivery partners across:
+
+   * United States
+   * Australia
+   * Other countries
+
+   The main purpose of the platform is to show available delivery slots/blocks that contain:
+
+   * Wages (example: $250)
+   * Time duration required to complete the deliveries
+   * Warehouse pickup location
+   * Delivery routes/orders
+
+   Drivers must complete the assigned deliveries within the specified time duration and, in return, they earn a good amount of money.
+
+4. User ScenariO
+
+   Let’s create a hypothetical example:
+
+   User A — Rahil wants to join our platform.
+
+   First, Rahil needs to log in using his delivery service provider credentials such as:
+
+   * Amazon Flex
+   * Uber
+   * Zomato
+   * Other delivery platforms
+
+   Therefore, we also need to implement secure authentication systems for each provider.
+
+   After login, Rahil can configure filters such as:
+
+   * Preferred locations
+   * Preferred times
+   * Desired wages
+   * Preferred dates
+
+   (Additional filters can be added in the future.)
+
+   Once Rahil clicks the Start button:
+
+   * If he does not have sufficient balance in his wallet, we will show an error message:
+
+     “You do not have enough balance. Please recharge your wallet.”
+
+   * If he has sufficient balance, our system will start searching for blocks in the background and find the best suitable opportunities for him.
+
+   The system will automatically assign/grab the best matching block for Rahil.
+
+   Important Note:
+   If the block payment is $250, we do NOT deduct our charges from the driver's earnings.
+   The service provider app pays the full amount directly to the user.
+
+   Our platform charges its own separate service fee.
+
+   Refund System:
+   If the user cancels the grabbed block, the charged amount should be refunded back to the user's wallet.
+
+5. How Can We Accept Blocks Faster?
+
+   Smart Answer:
+   We can use:
+
+   * AI automation
+   * Smart auto tapper technology
+   * Computer vision systems
+
+   Since many other applications are trying to grab the exact same delivery blocks simultaneously, speed becomes extremely important.
+   Some competitor apps already use technologies such as:
+
+   * AI Computer Vision
+   * Automated screen understanding
+   * Instant tapping systems
+
+   These systems intelligently read and understand delivery app screens instead of behaving like traditional bots.
+   We also need to carefully consider the risk of account deactivation and build the system in a safe and human-like way.
+
+   Biggest Competitor:
+   BUSYMATE
+   (http://www.busydrivers.com)
+
+   [Res] Need to find smart AI Tapper(like humantic)
+   [Suggestion] smart suggestion based on user activity. [Thanks to mihir]
+   
