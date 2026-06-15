@@ -3,10 +3,8 @@ import {
   Controller,
   Headers,
   Post,
-  RawBodyRequest,
   Req,
 } from '@nestjs/common';
-import type { Request } from 'express';
 import { Webhook } from 'standardwebhooks';
 import { ok } from '../../common/api-response';
 import { WalletService } from '../wallet/wallet.service';
@@ -30,7 +28,7 @@ export class PaymentsWebhookController {
 
   @Post()
   async handleDodoWebhook(
-    @Req() req: RawBodyRequest<Request>,
+    @Req() req: { rawBody?: Buffer },
     @Headers('webhook-id') webhookId: string,
     @Headers('webhook-timestamp') webhookTimestamp: string,
     @Headers('webhook-signature') webhookSignature: string,
