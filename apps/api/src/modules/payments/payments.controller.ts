@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Headers,
+  HttpCode,
   Post,
   Req,
 } from '@nestjs/common';
@@ -26,7 +28,20 @@ export class PaymentsWebhookController {
 
   constructor(private readonly walletService: WalletService) {}
 
+  /** Browser/Dodo URL check — webhooks are delivered via POST only. */
+  @Get()
+  verifyEndpoint() {
+    return ok({
+      status: 'webhook_active',
+      method: 'POST',
+      events: ['payment.succeeded', 'payment.failed'],
+      hint: 'Dodo sends POST requests here. Opening this URL in a browser (GET) is only for verification.',
+      secretConfigured: Boolean(process.env.DODO_WEBHOOK_SECRET),
+    });
+  }
+
   @Post()
+  @HttpCode(200)
   async handleDodoWebhook(
     @Req() req: { rawBody?: Buffer },
     @Headers('webhook-id') webhookId: string,

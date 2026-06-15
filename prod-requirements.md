@@ -100,7 +100,7 @@
 | Placeholder | Your value |
 |-------------|------------|
 | **DODO_PAYMENTS_MODE** | `test` |
-| **DODO_PAYMENTS_API_KEY** | `[Render env only — starts with test key from dashboard]` |
+| **DODO_PAYMENTS_API_KEY** | `5MCm_pot6adRP-Da.RirnU6wqX9gRdHwAj6vBuvKTrBH2Q8F87-Fa20QzIwIjX0Dx` |
 
 ---
 
@@ -110,13 +110,13 @@ In Dodo Dashboard → **Products → Add product** — create **3 one-time digit
 
 | Product name | Price | Placeholder for Product ID |
 |--------------|-------|----------------------------|
-| Thunder Wallet Credit — $25 | USD 25.00 | **DODO_PRODUCT_ID_25** = `[paste product_id]` |
-| Thunder Wallet Credit — $50 | USD 50.00 | **DODO_PRODUCT_ID_50** = `[paste product_id]` |
-| Thunder Wallet Credit — $100 | USD 100.00 | **DODO_PRODUCT_ID_100** = `[paste product_id]` |
+| Thunder Wallet Credit — $25 | USD 25.00 | **DODO_PRODUCT_ID_25** = `pdt_0Nh56EqES8QrdfQsc8xcp` |
+| Thunder Wallet Credit — $50 | USD 50.00 | **DODO_PRODUCT_ID_50** = `pdt_0Nh56QUtvddsF51hA2cED` |
+| Thunder Wallet Credit — $100 | USD 100.00 | **DODO_PRODUCT_ID_100** = `pdt_0Nh56YqBwD5YZhMKojjZA` |
 
 > Product IDs look like `prod_xxxx`. Copy from each product's detail page.
 
-**Products created?** `[ ]`
+**Products created?** `[ DONE ]`
 
 ---
 
@@ -125,19 +125,21 @@ In Dodo Dashboard → **Products → Add product** — create **3 one-time digit
 1. Dodo Dashboard → **Developer → Webhooks → Add Webhook**
 2. **Endpoint URL:**
    ```
-   https://YOUR-RENDER-URL.onrender.com/api/v1/webhooks/dodo
+   https://thunder-api-efz5.onrender.com/api/v1/webhooks/dodo
    ```
 3. **Subscribe to events:**
    - `payment.succeeded`
    - `payment.failed` *(optional)*
-4. Copy **Webhook Secret Key**
+4. Copy **Webhook Secret Key** → Render env `DODO_WEBHOOK_SECRET` → **Redeploy**
+
+> **Important:** Opening the webhook URL in a browser uses **GET** — that used to show 404. Real Dodo events are **POST** only. After next deploy, GET shows a verification JSON. Use Dodo dashboard **"Send test webhook"** to test for real.
 
 | Placeholder | Your value |
 |-------------|------------|
-| **DODO_WEBHOOK_URL** | `https://[your-render-host].onrender.com/api/v1/webhooks/dodo` |
-| **DODO_WEBHOOK_SECRET** | `[Render env only]` |
-
-**Webhook created?** `[ ]`
+| **DODO_WEBHOOK_URL** | `https://thunder-api-efz5.onrender.com/api/v1/webhooks/dodo` |
+| **DODO_WEBHOOK_SECRET** | `whsec_/AgOpTZXcoqIgDkotlV3ceSVOZWZlFaO` |
+| **GET verify in browser** | After redeploy: should show `webhook_active` JSON |
+| **Dodo "Send test" POST** | `[ yes ]` Returns 200 OK |
 
 ---
 
@@ -147,11 +149,11 @@ In **Render → thunder-api → Environment**, add/update:
 
 ```
 DODO_PAYMENTS_MODE=test
-DODO_PAYMENTS_API_KEY=your_test_api_key
-DODO_WEBHOOK_SECRET=your_webhook_secret
-DODO_PRODUCT_ID_25=prod_xxx
-DODO_PRODUCT_ID_50=prod_xxx
-DODO_PRODUCT_ID_100=prod_xxx
+DODO_PAYMENTS_API_KEY=5MCm_pot6adRP-Da.RirnU6wqX9gRdHwAj6vBuvKTrBH2Q8F87-Fa20QzIwIjX0Dx
+DODO_WEBHOOK_SECRET=whsec_/AgOpTZXcoqIgDkotlV3ceSVOZWZlFaO
+DODO_PRODUCT_ID_25=pdt_0Nh56EqES8QrdfQsc8xcp
+DODO_PRODUCT_ID_50=pdt_0Nh56QUtvddsF51hA2cED
+DODO_PRODUCT_ID_100=pdt_0Nh56YqBwD5YZhMKojjZA
 DODO_RETURN_URL=thunder://wallet?status=success
 DODO_CANCEL_URL=thunder://wallet?status=cancelled
 ```
@@ -183,9 +185,9 @@ Remove any `STRIPE_*` vars — not used.
 | Placeholder | Your value |
 |-------------|------------|
 | **RENDER_SERVICE_NAME** | `thunder-api` |
-| **RENDER_API_PUBLIC_URL** | `[https://thunder-api-xxxx.onrender.com]` |
-| **RENDER_API_BASE** | `[https://thunder-api-xxxx.onrender.com/api/v1]` |
-| **Health check OK?** | `[ ]` GET `/api/v1/health` returns success |
+| **RENDER_API_PUBLIC_URL** | `https://thunder-api-efz5.onrender.com` |
+| **RENDER_API_BASE** | `https://thunder-api-efz5.onrender.com/api/v1` |
+| **Health check OK?** | Open **`https://thunder-api-efz5.onrender.com/api/v1/health`** (not `/` alone) → expect `{"success":true,"data":{"status":"ok",...}}` |
 
 ### Render env vars (full list)
 
@@ -214,7 +216,7 @@ DODO_CANCEL_URL=thunder://wallet?status=cancelled
 File: `apps/mobile/.env` (local, gitignored)
 
 ```env
-EXPO_PUBLIC_API_URL=https://YOUR-RENDER-URL.onrender.com/api/v1
+EXPO_PUBLIC_API_URL=https://thunder-api-efz5.onrender.com/api/v1
 ```
 
 | Placeholder | Your value |
