@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Wallet, WalletTransaction } from '@thunder-spark/shared';
 import { MIN_WALLET_BALANCE_CENTS } from '@thunder-spark/shared';
@@ -11,14 +12,20 @@ import { apiRequest, formatCents } from '@/lib/api';
 export default function WalletScreen() {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
+  const [paymentProvider, setPaymentProvider] = useState<'dodo' | 'stub'>('stub');
   const [loading, setLoading] = useState(true);
   const [recharging, setRecharging] = useState(false);
 
   const load = useCallback(async () => {
-    const result = await apiRequest<{ wallet: Wallet; transactions: WalletTransaction[] }>('/wallet');
+    const result = await apiRequest<{
+      wallet: Wallet;
+      transactions: WalletTransaction[];
+      paymentProvider?: 'dodo' | 'stub';
+    }>('/wallet');
     if (result.success) {
       setWallet(result.data.wallet);
       setTransactions(result.data.transactions);
+      if (result.data.paymentProvider) setPaymentProvider(result.data.paymentProvider);
     }
     setLoading(false);
   }, []);
@@ -29,6 +36,26 @@ export default function WalletScreen() {
 
   async function recharge(amountCents: number) {
     setRecharging(true);
+
+    if (paymentProvider === 'dodo') {
+      const checkout = await apiRequest<{ checkoutUrl: string }>('/wallet/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ amountCents }),
+      });
+      setRecharging(false);
+      if (!checkout.success) {
+        Alert.alert('Checkout failed', checkout.error.message);
+        return;
+      }
+      await WebBrowser.openBrowserAsync(checkout.data.checkoutUrl);
+      Alert.alert(
+        'Complete payment',
+        'Finish checkout in the browser. Your balance will update shortly after payment.',
+      );
+      setTimeout(load, 4000);
+      return;
+    }
+
     const result = await apiRequest('/wallet/recharge', {
       method: 'POST',
       body: JSON.stringify({ amountCents }),
@@ -74,7 +101,11 @@ export default function WalletScreen() {
           <Button title="+ $50" onPress={() => recharge(5000)} loading={recharging} style={styles.rechargeBtn} />
           <Button title="+ $100" onPress={() => recharge(10000)} loading={recharging} style={styles.rechargeBtn} />
         </View>
-        <Text style={styles.stubNote}>MVP: instant credit (Stripe in production)</Text>
+        <Text style={styles.stubNote}>
+          {paymentProvider === 'dodo'
+            ? 'Secure checkout via Dodo Payments (cards, UPI, PayPal)'
+            : 'Dev mode: instant credit stub — configure Dodo on server for real payments'}
+        </Text>
 
         <Text style={styles.sectionTitle}>Transactions</Text>
         {transactions.length === 0 ? (

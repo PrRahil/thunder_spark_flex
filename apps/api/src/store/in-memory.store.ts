@@ -23,6 +23,7 @@ export class InMemoryStore {
   providerConnections = new Map<string, ProviderConnection>();
   blockJobs = new Map<string, BlockJob>();
   refreshTokens = new Map<string, string>();
+  processedPaymentIds = new Set<string>();
 
   createUser(email: string, name: string, passwordHash: string): User {
     const id = randomUUID();

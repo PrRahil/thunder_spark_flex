@@ -38,11 +38,33 @@ export class WalletService {
     const transaction = this.recordTxn(user.id, {
       type: WALLET_TXN_TYPE.CREDIT,
       amountCents,
-      description: 'Wallet recharge',
-      referenceType: 'STRIPE_STUB',
+      description: 'Wallet recharge (dev stub)',
+      referenceType: 'DEV_STUB',
       referenceId: randomUUID(),
     });
     return { wallet, transaction };
+  }
+
+  creditFromPayment(
+    userId: string,
+    amountCents: number,
+    partial: { referenceType: string; referenceId: string; description: string },
+  ): WalletTransaction | null {
+    const idempotencyKey = `${partial.referenceType}:${partial.referenceId}`;
+    if (this.store.processedPaymentIds.has(idempotencyKey)) {
+      return null;
+    }
+    this.store.processedPaymentIds.add(idempotencyKey);
+
+    const wallet = this.getWallet(userId);
+    wallet.balanceCents += amountCents;
+    return this.recordTxn(userId, {
+      type: WALLET_TXN_TYPE.CREDIT,
+      amountCents,
+      description: partial.description,
+      referenceType: partial.referenceType,
+      referenceId: partial.referenceId,
+    });
   }
 
   chargeServiceFee(userId: string, blockJobId: string): WalletTransaction {

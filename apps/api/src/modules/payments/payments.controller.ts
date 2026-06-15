@@ -1,0 +1,66 @@
+import {
+  Body,
+  Controller,
+  Headers,
+  Post,
+  RawBodyRequest,
+  Req,
+} from '@nestjs/common';
+import type { Request } from 'express';
+import { Webhook } from 'standardwebhooks';
+import { ok } from '../../common/api-response';
+import { WalletService } from '../wallet/wallet.service';
+import { DodoPaymentsService } from './dodo-payments.service';
+
+interface DodoWebhookPayload {
+  type: string;
+  data?: {
+    metadata?: Record<string, string>;
+    payment_id?: string;
+  };
+}
+
+@Controller('webhooks/dodo')
+export class PaymentsWebhookController {
+  private readonly webhook = process.env.DODO_WEBHOOK_SECRET
+    ? new Webhook(process.env.DODO_WEBHOOK_SECRET)
+    : null;
+
+  constructor(private readonly walletService: WalletService) {}
+
+  @Post()
+  async handleDodoWebhook(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('webhook-id') webhookId: string,
+    @Headers('webhook-timestamp') webhookTimestamp: string,
+    @Headers('webhook-signature') webhookSignature: string,
+    @Body() body: DodoWebhookPayload,
+  ) {
+    const rawBody = req.rawBody?.toString('utf8') ?? JSON.stringify(body);
+
+    if (this.webhook) {
+      await this.webhook.verify(rawBody, {
+        'webhook-id': webhookId,
+        'webhook-timestamp': webhookTimestamp,
+        'webhook-signature': webhookSignature,
+      });
+    }
+
+    if (body.type === 'payment.succeeded') {
+      const metadata = body.data?.metadata ?? {};
+      const userId = metadata.user_id;
+      const amountCents = Number(metadata.amount_cents);
+      const referenceId = metadata.idempotency_key ?? body.data?.payment_id ?? 'unknown';
+
+      if (userId && amountCents > 0) {
+        this.walletService.creditFromPayment(userId, amountCents, {
+          referenceType: 'DODO_PAYMENT',
+          referenceId,
+          description: 'Wallet recharge (Dodo Payments)',
+        });
+      }
+    }
+
+    return ok({ received: true });
+  }
+}

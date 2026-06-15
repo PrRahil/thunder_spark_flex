@@ -577,6 +577,7 @@ Choose **Proceed anonymously** for local development. Expo account is only requi
 |----------|-------------|
 | [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) | Full system design spec — NFRs, deployment topology, anti-ban strategy |
 | [docs/EXTERNAL_SETUP.md](docs/EXTERNAL_SETUP.md) | External services checklist — Stripe, hosting, App Store, Amazon Flex R&D |
+| [prod-requirements.md](prod-requirements.md) | **Fill-in checklist** for hosted production setup (Neon, Render, Dodo Payments) |
 | [app_details.txt](app_details.txt) | Original product requirements |
 
 ---
