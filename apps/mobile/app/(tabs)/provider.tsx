@@ -63,10 +63,15 @@ export default function ProviderScreen() {
               <Text style={styles.providerName}>Amazon Flex</Text>
               <Text style={styles.providerSub}>Primary · US, AU & more</Text>
             </View>
-            <Badge label={connected ? 'Active' : 'Offline'} tone={connected ? 'success' : 'default'} />
+            <Badge
+              label={connected ? 'Active' : 'Offline'}
+              tone={connected ? 'success' : 'default'}
+            />
           </View>
           {flex?.expiresAt ? (
-            <Text style={styles.meta}>Session expires {new Date(flex.expiresAt).toLocaleString()}</Text>
+            <Text style={styles.meta}>
+              Session expires {new Date(flex.expiresAt).toLocaleString()}
+            </Text>
           ) : null}
           <Button
             title={connected ? 'Reconnect Flex' : 'Connect Amazon Flex'}
@@ -90,7 +95,8 @@ export default function ProviderScreen() {
         <Card style={styles.noteCard}>
           <Ionicons name="shield-checkmark" size={18} color={colors.primary} />
           <Text style={styles.note}>
-            Production uses secure WebView login. Session tokens are encrypted on our servers — never shared.
+            Production uses secure WebView login. Session tokens are encrypted on our servers —
+            never shared.
           </Text>
         </Card>
       </ScrollView>
@@ -116,9 +122,21 @@ const styles = StyleSheet.create({
   providerSub: { color: colors.textSecondary, fontSize: 13, marginTop: 2 },
   meta: { color: colors.textMuted, fontSize: 12, marginTop: 10 },
   comingSoon: { opacity: 0.7 },
-  comingTitle: { color: colors.textMuted, fontSize: 12, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 },
+  comingTitle: {
+    color: colors.textMuted,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+  },
   comingRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 6 },
   comingText: { color: colors.textSecondary, fontSize: 14 },
-  noteCard: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', backgroundColor: colors.bgInput },
+  noteCard: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'flex-start',
+    backgroundColor: colors.bgInput,
+  },
   note: { color: colors.textSecondary, fontSize: 13, lineHeight: 19, flex: 1 },
 });

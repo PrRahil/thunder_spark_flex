@@ -34,13 +34,27 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.flex}
+      >
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <ScreenHeader title="Create account" subtitle="Join Thunder and start grabbing blocks" />
           <View style={styles.form}>
             <Input placeholder="Full name" value={name} onChangeText={setName} />
-            <Input autoCapitalize="none" keyboardType="email-address" placeholder="Email" value={email} onChangeText={setEmail} />
-            <Input secureTextEntry placeholder="Password (min 8 characters)" value={password} onChangeText={setPassword} />
+            <Input
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <Input
+              secureTextEntry
+              placeholder="Password (min 8 characters)"
+              value={password}
+              onChangeText={setPassword}
+            />
             {error ? <Text style={styles.error}>{error}</Text> : null}
             <Button title="Sign up" onPress={handleRegister} loading={loading} />
           </View>

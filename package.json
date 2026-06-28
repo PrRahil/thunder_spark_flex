@@ -11,13 +11,45 @@
     "build": "npm run build --workspaces --if-present",
     "dev:api": "npm run dev -w @thunder-spark/api",
     "dev:mobile": "npm run start -w @thunder-spark/mobile",
-    "lint": "npm run lint --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build:packages": "npm run build -w @thunder-spark/shared && npm run build -w @thunder-spark/provider-core",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-secrets": "node scripts/check-secrets.mjs",
+    "check-secrets:staged": "node scripts/check-secrets.mjs --staged",
+    "validate": "npm run format:check && npm run lint && npm run build:packages && npm run typecheck && npm run test && npm run check-secrets",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": ">=20"
   },
   "overrides": {
     "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.1",
+    "typescript-eslint": "^8.62.0",
+    "vitest": "^4.1.9"
   }
 }

@@ -6,11 +6,7 @@ import {
 } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import type { BlockJob, User } from '@thunder-spark/shared';
-import {
-  BLOCK_JOB_STATUS,
-  ERROR_CODES,
-  startBlockJobSchema,
-} from '@thunder-spark/shared';
+import { BLOCK_JOB_STATUS, ERROR_CODES, startBlockJobSchema } from '@thunder-spark/shared';
 import { InMemoryStore } from '../../store/in-memory.store';
 import { FiltersService } from '../filters/filters.service';
 import { ProvidersService } from '../providers/providers.service';

@@ -97,9 +97,24 @@ export default function WalletScreen() {
         </View>
 
         <View style={styles.rechargeRow}>
-          <Button title="+ $25" onPress={() => recharge(2500)} loading={recharging} style={styles.rechargeBtn} />
-          <Button title="+ $50" onPress={() => recharge(5000)} loading={recharging} style={styles.rechargeBtn} />
-          <Button title="+ $100" onPress={() => recharge(10000)} loading={recharging} style={styles.rechargeBtn} />
+          <Button
+            title="+ $25"
+            onPress={() => recharge(2500)}
+            loading={recharging}
+            style={styles.rechargeBtn}
+          />
+          <Button
+            title="+ $50"
+            onPress={() => recharge(5000)}
+            loading={recharging}
+            style={styles.rechargeBtn}
+          />
+          <Button
+            title="+ $100"
+            onPress={() => recharge(10000)}
+            loading={recharging}
+            style={styles.rechargeBtn}
+          />
         </View>
         <Text style={styles.stubNote}>
           {paymentProvider === 'dodo'
@@ -142,7 +157,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(250, 204, 21, 0.35)',
   },
-  balanceLabel: { color: colors.textSecondary, fontSize: 12, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase' },
+  balanceLabel: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
   balance: { color: colors.primary, fontSize: 42, fontWeight: '900', marginTop: 8 },
   warningRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 10 },
   warning: { color: colors.warning, fontSize: 13, flex: 1 },

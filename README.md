@@ -4,13 +4,13 @@
 
 > **Business model:** Block earnings (e.g. $250) are paid by the provider directly to the driver. Thunder charges a separate **$9 service fee** per successful grab from the in-app wallet.
 
-| | |
-|---|---|
-| **Platform** | React Native + Expo SDK 54 (iOS & Android) |
-| **Backend** | NestJS (TypeScript) |
-| **Primary provider (v1)** | Amazon Flex |
-| **Repo layout** | npm workspaces monorepo |
-| **MVP status** | Functional end-to-end with **stubbed** payments & provider API |
+|                           |                                                                |
+| ------------------------- | -------------------------------------------------------------- |
+| **Platform**              | React Native + Expo SDK 54 (iOS & Android)                     |
+| **Backend**               | NestJS (TypeScript)                                            |
+| **Primary provider (v1)** | Amazon Flex                                                    |
+| **Repo layout**           | npm workspaces monorepo                                        |
+| **MVP status**            | Functional end-to-end with **stubbed** payments & provider API |
 
 ---
 
@@ -51,11 +51,11 @@ Delivery platforms like **Amazon Flex** publish time-limited delivery blocks (sh
 
 ### Why polling cannot run on the phone
 
-| Platform | Background limit | Implication |
-|----------|------------------|-------------|
-| **iOS** | BGTaskScheduler: ~15 min minimum interval, ~30 s max runtime | Cannot sustain millisecond polling on-device |
-| **Android** | WorkManager / foreground service — better, but still unreliable vs server | Same conclusion for v1 |
-| **Server** | Sub-100 ms polling, 24/7, geo-distributed workers | **Block engine must run server-side** |
+| Platform    | Background limit                                                          | Implication                                  |
+| ----------- | ------------------------------------------------------------------------- | -------------------------------------------- |
+| **iOS**     | BGTaskScheduler: ~15 min minimum interval, ~30 s max runtime              | Cannot sustain millisecond polling on-device |
+| **Android** | WorkManager / foreground service — better, but still unreliable vs server | Same conclusion for v1                       |
+| **Server**  | Sub-100 ms polling, 24/7, geo-distributed workers                         | **Block engine must run server-side**        |
 
 The mobile app is the **control plane** (UI, auth, filters, wallet, start/stop). The backend is the **data plane** (polling, scoring, grabbing).
 
@@ -109,14 +109,14 @@ flowchart TB
 
 ### Layer responsibilities
 
-| Layer | Technology | Responsibility |
-|-------|------------|----------------|
-| **Mobile** | Expo SDK 54, React Native, expo-router | User interface, secure token storage, API client |
-| **API Gateway** | NestJS | REST endpoints, auth guards, orchestration |
-| **Block Engine** | NestJS service (future: BullMQ worker) | Poll loop, block scoring, accept, fee charge |
-| **Provider Adapter** | `IProviderAdapter` interface | Provider-specific API calls (Amazon Flex v1) |
-| **Shared** | TypeScript + Zod | Types, validation, constants shared across apps |
-| **Store** | InMemoryStore (MVP) → PostgreSQL (prod) | Users, wallets, filters, jobs, sessions |
+| Layer                | Technology                              | Responsibility                                   |
+| -------------------- | --------------------------------------- | ------------------------------------------------ |
+| **Mobile**           | Expo SDK 54, React Native, expo-router  | User interface, secure token storage, API client |
+| **API Gateway**      | NestJS                                  | REST endpoints, auth guards, orchestration       |
+| **Block Engine**     | NestJS service (future: BullMQ worker)  | Poll loop, block scoring, accept, fee charge     |
+| **Provider Adapter** | `IProviderAdapter` interface            | Provider-specific API calls (Amazon Flex v1)     |
+| **Shared**           | TypeScript + Zod                        | Types, validation, constants shared across apps  |
+| **Store**            | InMemoryStore (MVP) → PostgreSQL (prod) | Users, wallets, filters, jobs, sessions          |
 
 ---
 
@@ -198,14 +198,14 @@ thunder-spark-flex/                 # npm workspaces root
 
 All API routes are prefixed with **`/api/v1`**.
 
-| Module | Path | Auth | Description |
-|--------|------|------|-------------|
-| **health** | `GET /health` | No | Service health check |
-| **auth** | `POST /auth/register`, `POST /auth/login` | No | User accounts, JWT access + refresh tokens |
-| **filters** | `GET/POST/PUT/DELETE /filters` | Yes | Filter presets (dates, times, locations, min wage) |
-| **wallet** | `GET /wallet`, `POST /wallet/recharge` | Yes | Balance, transactions, recharge (stub in MVP) |
-| **providers** | `GET /providers`, `POST /providers/connect` | Yes | Link Amazon Flex session (stub in MVP) |
-| **block-jobs** | `GET/POST /block-jobs/*` | Yes | Start/stop search, status, refund |
+| Module         | Path                                        | Auth | Description                                        |
+| -------------- | ------------------------------------------- | ---- | -------------------------------------------------- |
+| **health**     | `GET /health`                               | No   | Service health check                               |
+| **auth**       | `POST /auth/register`, `POST /auth/login`   | No   | User accounts, JWT access + refresh tokens         |
+| **filters**    | `GET/POST/PUT/DELETE /filters`              | Yes  | Filter presets (dates, times, locations, min wage) |
+| **wallet**     | `GET /wallet`, `POST /wallet/recharge`      | Yes  | Balance, transactions, recharge (stub in MVP)      |
+| **providers**  | `GET /providers`, `POST /providers/connect` | Yes  | Link Amazon Flex session (stub in MVP)             |
+| **block-jobs** | `GET/POST /block-jobs/*`                    | Yes  | Start/stop search, status, refund                  |
 
 ### Block engine (`apps/api/src/modules/block-engine/`)
 
@@ -231,14 +231,14 @@ Runs inside the API process for MVP. Each active job:
 
 Built with **Expo Router** (file-based navigation) and a **yellow + dark** design system (`constants/theme.ts`).
 
-| Screen | Route | Purpose |
-|--------|-------|---------|
-| Login | `/(auth)/login` | Email/password sign-in |
-| Register | `/(auth)/register` | Create Thunder account |
-| Dashboard | `/(tabs)/dashboard` | START/STOP, job status, last grab |
-| Filters | `/(tabs)/filters` | View/create filter presets |
-| Wallet | `/(tabs)/wallet` | Balance, recharge, transaction history |
-| Connect | `/(tabs)/provider` | Link Amazon Flex account |
+| Screen    | Route               | Purpose                                |
+| --------- | ------------------- | -------------------------------------- |
+| Login     | `/(auth)/login`     | Email/password sign-in                 |
+| Register  | `/(auth)/register`  | Create Thunder account                 |
+| Dashboard | `/(tabs)/dashboard` | START/STOP, job status, last grab      |
+| Filters   | `/(tabs)/filters`   | View/create filter presets             |
+| Wallet    | `/(tabs)/wallet`    | Balance, recharge, transaction history |
+| Connect   | `/(tabs)/provider`  | Link Amazon Flex account               |
 
 ### API connectivity
 
@@ -264,12 +264,12 @@ The API listens on `0.0.0.0` so it accepts connections from the local network.
 
 Single source of truth for cross-app contracts:
 
-| Export | Purpose |
-|--------|---------|
+| Export         | Purpose                                                             |
+| -------------- | ------------------------------------------------------------------- |
 | `constants.ts` | `SERVICE_FEE_CENTS`, `PROVIDERS`, `BLOCK_JOB_STATUS`, `ERROR_CODES` |
-| `schemas.ts` | Zod validation for register, login, filters, wallet recharge |
-| `types.ts` | `User`, `FilterPreset`, `Wallet`, `BlockJob`, `DeliveryBlock`, etc. |
-| `errors.ts` | `AppError` class |
+| `schemas.ts`   | Zod validation for register, login, filters, wallet recharge        |
+| `types.ts`     | `User`, `FilterPreset`, `Wallet`, `BlockJob`, `DeliveryBlock`, etc. |
+| `errors.ts`    | `AppError` class                                                    |
 
 ### `@thunder-spark/provider-core`
 
@@ -341,15 +341,15 @@ User cancels grabbed block → POST /block-jobs/:id/refund
 
 ## Data model
 
-| Entity | Key fields | Notes |
-|--------|------------|-------|
-| **User** | `id`, `email`, `name`, `passwordHash` | Thunder account (not Flex account) |
-| **ProviderConnection** | `userId`, `provider`, `status`, `expiresAt` | Flex session; encrypted in production |
-| **FilterPreset** | `dates[]`, `timeRanges[]`, `locations[]`, `minWageCents` | User search criteria |
-| **Wallet** | `userId`, `balanceCents`, `currency` | Prepaid balance for service fees |
-| **WalletTransaction** | `type`, `amountCents`, `referenceType`, `referenceId` | CREDIT / DEBIT / REFUND / HOLD / RELEASE |
-| **BlockJob** | `status`, `filterPresetId`, `pollCount`, `grabbedBlock` | RUNNING → SUCCESS / FAILED / STOPPED / PAUSED |
-| **GrabbedBlock** | `wageCents`, `locationName`, `feeChargedCents`, `status` | ACTIVE / CANCELLED / COMPLETED |
+| Entity                 | Key fields                                               | Notes                                         |
+| ---------------------- | -------------------------------------------------------- | --------------------------------------------- |
+| **User**               | `id`, `email`, `name`, `passwordHash`                    | Thunder account (not Flex account)            |
+| **ProviderConnection** | `userId`, `provider`, `status`, `expiresAt`              | Flex session; encrypted in production         |
+| **FilterPreset**       | `dates[]`, `timeRanges[]`, `locations[]`, `minWageCents` | User search criteria                          |
+| **Wallet**             | `userId`, `balanceCents`, `currency`                     | Prepaid balance for service fees              |
+| **WalletTransaction**  | `type`, `amountCents`, `referenceType`, `referenceId`    | CREDIT / DEBIT / REFUND / HOLD / RELEASE      |
+| **BlockJob**           | `status`, `filterPresetId`, `pollCount`, `grabbedBlock`  | RUNNING → SUCCESS / FAILED / STOPPED / PAUSED |
+| **GrabbedBlock**       | `wageCents`, `locationName`, `feeChargedCents`, `status` | ACTIVE / CANCELLED / COMPLETED                |
 
 ---
 
@@ -359,29 +359,29 @@ Base URL: `http://localhost:3000/api/v1` (dev)
 
 ### Public
 
-| Method | Path | Body | Response |
-|--------|------|------|----------|
-| `GET` | `/health` | — | `{ status, service, version }` |
-| `POST` | `/auth/register` | `{ email, password, name }` | `{ user, tokens }` |
-| `POST` | `/auth/login` | `{ email, password }` | `{ user, tokens }` |
+| Method | Path             | Body                        | Response                       |
+| ------ | ---------------- | --------------------------- | ------------------------------ |
+| `GET`  | `/health`        | —                           | `{ status, service, version }` |
+| `POST` | `/auth/register` | `{ email, password, name }` | `{ user, tokens }`             |
+| `POST` | `/auth/login`    | `{ email, password }`       | `{ user, tokens }`             |
 
 ### Authenticated (header: `Authorization: Bearer <token>`)
 
-| Method | Path | Body | Response |
-|--------|------|------|----------|
-| `GET` | `/filters` | — | `FilterPreset[]` |
-| `POST` | `/filters` | `FilterPresetInput` | `FilterPreset` |
-| `PUT` | `/filters/:id` | `FilterPresetInput` | `FilterPreset` |
-| `DELETE` | `/filters/:id` | — | `{ deleted: true }` |
-| `GET` | `/wallet` | — | `{ wallet, transactions }` |
-| `POST` | `/wallet/recharge` | `{ amountCents }` | `{ wallet, transaction }` |
-| `GET` | `/providers` | — | `ProviderConnection[]` |
-| `POST` | `/providers/connect` | `{ provider, sessionPayload }` | `ProviderConnection` |
-| `GET` | `/block-jobs` | — | `BlockJob[]` |
-| `GET` | `/block-jobs/:id` | — | `BlockJob` |
-| `POST` | `/block-jobs/start` | `{ filterPresetId }` | `BlockJob` |
-| `POST` | `/block-jobs/:id/stop` | — | `BlockJob` |
-| `POST` | `/block-jobs/:id/refund` | — | `BlockJob` |
+| Method   | Path                     | Body                           | Response                   |
+| -------- | ------------------------ | ------------------------------ | -------------------------- |
+| `GET`    | `/filters`               | —                              | `FilterPreset[]`           |
+| `POST`   | `/filters`               | `FilterPresetInput`            | `FilterPreset`             |
+| `PUT`    | `/filters/:id`           | `FilterPresetInput`            | `FilterPreset`             |
+| `DELETE` | `/filters/:id`           | —                              | `{ deleted: true }`        |
+| `GET`    | `/wallet`                | —                              | `{ wallet, transactions }` |
+| `POST`   | `/wallet/recharge`       | `{ amountCents }`              | `{ wallet, transaction }`  |
+| `GET`    | `/providers`             | —                              | `ProviderConnection[]`     |
+| `POST`   | `/providers/connect`     | `{ provider, sessionPayload }` | `ProviderConnection`       |
+| `GET`    | `/block-jobs`            | —                              | `BlockJob[]`               |
+| `GET`    | `/block-jobs/:id`        | —                              | `BlockJob`                 |
+| `POST`   | `/block-jobs/start`      | `{ filterPresetId }`           | `BlockJob`                 |
+| `POST`   | `/block-jobs/:id/stop`   | —                              | `BlockJob`                 |
+| `POST`   | `/block-jobs/:id/refund` | —                              | `BlockJob`                 |
 
 All responses use the envelope:
 
@@ -401,13 +401,13 @@ All responses use the envelope:
 
 Blocks are ranked by a weighted score:
 
-| Factor | Points |
-|--------|--------|
-| Base | `wageCents` |
-| Date matches filter | +5000 |
-| Location matches filter | +3000 |
-| Time within range | +2000 |
-| Meets minimum wage | +1000 |
+| Factor                  | Points      |
+| ----------------------- | ----------- |
+| Base                    | `wageCents` |
+| Date matches filter     | +5000       |
+| Location matches filter | +3000       |
+| Time within range       | +2000       |
+| Meets minimum wage      | +1000       |
 
 ### Amazon Flex integration (production plan)
 
@@ -425,11 +425,11 @@ Amazon Flex has **no public API**. Production integration requires:
 
 ## Wallet & billing
 
-| Event | Wallet | Notes |
-|-------|--------|-------|
-| Recharge $50 | +5000 cents | MVP: instant stub; prod: Stripe webhook |
-| Successful grab | −900 cents ($9) | Charged only on confirmed accept |
-| Cancelled block refund | +900 cents | Via `POST /block-jobs/:id/refund` |
+| Event                  | Wallet          | Notes                                   |
+| ---------------------- | --------------- | --------------------------------------- |
+| Recharge $50           | +5000 cents     | MVP: instant stub; prod: Stripe webhook |
+| Successful grab        | −900 cents ($9) | Charged only on confirmed accept        |
+| Cancelled block refund | +900 cents      | Via `POST /block-jobs/:id/refund`       |
 
 Constants (from `@thunder-spark/shared`):
 
@@ -442,15 +442,15 @@ Block earnings from Amazon go **directly to the driver** — Thunder never touch
 
 ## MVP vs production
 
-| Feature | MVP (current) | Production (planned) |
-|---------|---------------|----------------------|
-| Persistence | In-memory (`InMemoryStore`) | PostgreSQL + Prisma |
-| Wallet recharge | Instant credit stub | Stripe PaymentSheet + webhooks |
-| Amazon Flex | Simulated blocks | Real reverse-engineered API |
-| Block engine | In-process `setInterval` | BullMQ worker + Redis |
-| Auth tokens | HMAC dev tokens | Proper JWT + refresh rotation |
-| Push notifications | — | Expo Notifications + APNs/FCM |
-| Deployment | Local dev | Railway/Render + EAS Build |
+| Feature            | MVP (current)               | Production (planned)           |
+| ------------------ | --------------------------- | ------------------------------ |
+| Persistence        | In-memory (`InMemoryStore`) | PostgreSQL + Prisma            |
+| Wallet recharge    | Instant credit stub         | Stripe PaymentSheet + webhooks |
+| Amazon Flex        | Simulated blocks            | Real reverse-engineered API    |
+| Block engine       | In-process `setInterval`    | BullMQ worker + Redis          |
+| Auth tokens        | HMAC dev tokens             | Proper JWT + refresh rotation  |
+| Push notifications | —                           | Expo Notifications + APNs/FCM  |
+| Deployment         | Local dev                   | Railway/Render + EAS Build     |
 
 ---
 
@@ -481,12 +481,12 @@ npm run dev:mobile
 
 ### Testing options
 
-| Method | Platform | Notes |
-|--------|----------|-------|
-| **Expo Go (QR scan)** | iOS / Android phone | Set `EXPO_PUBLIC_API_URL` to PC LAN IP |
-| **Web (`w`)** | Browser | API can stay on `localhost` |
-| **iOS simulator (`i`)** | macOS only | Requires Xcode |
-| **Android emulator (`a`)** | Any | Requires Android Studio + `ANDROID_HOME` |
+| Method                     | Platform            | Notes                                    |
+| -------------------------- | ------------------- | ---------------------------------------- |
+| **Expo Go (QR scan)**      | iOS / Android phone | Set `EXPO_PUBLIC_API_URL` to PC LAN IP   |
+| **Web (`w`)**              | Browser             | API can stay on `localhost`              |
+| **iOS simulator (`i`)**    | macOS only          | Requires Xcode                           |
+| **Android emulator (`a`)** | Any                 | Requires Android Studio + `ANDROID_HOME` |
 
 ### Manual E2E test flow
 
@@ -557,28 +557,28 @@ Choose **Proceed anonymously** for local development. Expo account is only requi
 
 ## Roadmap
 
-| Phase | Deliverable | Status |
-|-------|-------------|--------|
-| 0 | Monorepo + shared types | Done |
-| 1 | API + auth + mobile shell | Done |
-| 2 | Filters, wallet, provider, block engine (stub) | Done |
-| 3 | PostgreSQL + Prisma | Planned |
-| 4 | Stripe wallet recharge | Planned |
-| 5 | Real Amazon Flex adapter | Planned |
-| 6 | WebSocket live status + push notifications | Planned |
-| 7 | EAS Build → TestFlight / Play Store | Planned |
-| 8 | Additional providers (Uber, Zomato) | Future |
+| Phase | Deliverable                                    | Status  |
+| ----- | ---------------------------------------------- | ------- |
+| 0     | Monorepo + shared types                        | Done    |
+| 1     | API + auth + mobile shell                      | Done    |
+| 2     | Filters, wallet, provider, block engine (stub) | Done    |
+| 3     | PostgreSQL + Prisma                            | Planned |
+| 4     | Stripe wallet recharge                         | Planned |
+| 5     | Real Amazon Flex adapter                       | Planned |
+| 6     | WebSocket live status + push notifications     | Planned |
+| 7     | EAS Build → TestFlight / Play Store            | Planned |
+| 8     | Additional providers (Uber, Zomato)            | Future  |
 
 ---
 
 ## Further reading
 
-| Document | Description |
-|----------|-------------|
-| [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) | Full system design spec — NFRs, deployment topology, anti-ban strategy |
-| [docs/EXTERNAL_SETUP.md](docs/EXTERNAL_SETUP.md) | External services checklist — Stripe, hosting, App Store, Amazon Flex R&D |
-| [prod-requirements.md](prod-requirements.md) | **Fill-in checklist** for hosted production setup (Neon, Render, Dodo Payments) |
-| [app_details.txt](app_details.txt) | Original product requirements |
+| Document                                         | Description                                                                     |
+| ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md)   | Full system design spec — NFRs, deployment topology, anti-ban strategy          |
+| [docs/EXTERNAL_SETUP.md](docs/EXTERNAL_SETUP.md) | External services checklist — Stripe, hosting, App Store, Amazon Flex R&D       |
+| [prod-requirements.md](prod-requirements.md)     | **Fill-in checklist** for hosted production setup (Neon, Render, Dodo Payments) |
+| [app_details.txt](app_details.txt)               | Original product requirements                                                   |
 
 ---
 

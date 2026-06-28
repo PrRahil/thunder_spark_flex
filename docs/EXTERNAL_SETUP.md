@@ -6,15 +6,15 @@ This document lists **every external service** needed beyond the code already in
 
 ## What works TODAY (no external setup)
 
-| Feature | Status |
-|---------|--------|
-| User register / login | In-memory backend (dev) |
-| Filters CRUD | Works |
-| Wallet balance + recharge | **Stub** — instant credit, no real payment |
-| Amazon Flex connect | **Stub** — simulates session |
-| Block search + grab | **Stub** — simulated blocks, real flow |
-| Mobile UI (iOS + Android via Expo Go) | Works after SDK 54 upgrade |
-| Web preview (`npm run web -w @thunder-spark/mobile`) | Works on Windows |
+| Feature                                              | Status                                     |
+| ---------------------------------------------------- | ------------------------------------------ |
+| User register / login                                | In-memory backend (dev)                    |
+| Filters CRUD                                         | Works                                      |
+| Wallet balance + recharge                            | **Stub** — instant credit, no real payment |
+| Amazon Flex connect                                  | **Stub** — simulates session               |
+| Block search + grab                                  | **Stub** — simulated blocks, real flow     |
+| Mobile UI (iOS + Android via Expo Go)                | Works after SDK 54 upgrade                 |
+| Web preview (`npm run web -w @thunder-spark/mobile`) | Works on Windows                           |
 
 ---
 
@@ -63,11 +63,11 @@ npm run dev:mobile
 
 ### A. Hosting — Backend API + Block Engine
 
-| Service | Purpose | Est. cost | Where |
-|---------|---------|-----------|-------|
-| **Railway** or **Render** or **AWS EC2** | NestJS API + worker | $5–50/mo | [railway.app](https://railway.app), [render.com](https://render.com), [aws.amazon.com](https://aws.amazon.com) |
-| **PostgreSQL** (Railway/Supabase/Neon) | Users, wallet ledger, jobs | Free tier → $15/mo | [supabase.com](https://supabase.com), [neon.tech](https://neon.tech) |
-| **Redis** (Upstash/Railway) | Job queue, session cache | Free tier → $10/mo | [upstash.com](https://upstash.com) |
+| Service                                  | Purpose                    | Est. cost          | Where                                                                                                          |
+| ---------------------------------------- | -------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| **Railway** or **Render** or **AWS EC2** | NestJS API + worker        | $5–50/mo           | [railway.app](https://railway.app), [render.com](https://render.com), [aws.amazon.com](https://aws.amazon.com) |
+| **PostgreSQL** (Railway/Supabase/Neon)   | Users, wallet ledger, jobs | Free tier → $15/mo | [supabase.com](https://supabase.com), [neon.tech](https://neon.tech)                                           |
+| **Redis** (Upstash/Railway)              | Job queue, session cache   | Free tier → $10/mo | [upstash.com](https://upstash.com)                                                                             |
 
 **Env vars to set on host:** copy from `apps/api/.env.example`
 
@@ -75,12 +75,13 @@ npm run dev:mobile
 
 ### B. Payments — Stripe
 
-| Item | Purpose | Cost |
-|------|---------|------|
-| [Stripe account](https://dashboard.stripe.com/register) | Wallet top-up | 2.9% + $0.30 per charge |
-| Apple Pay merchant ID | iOS payments | Free (Apple Developer account required) |
+| Item                                                    | Purpose       | Cost                                    |
+| ------------------------------------------------------- | ------------- | --------------------------------------- |
+| [Stripe account](https://dashboard.stripe.com/register) | Wallet top-up | 2.9% + $0.30 per charge                 |
+| Apple Pay merchant ID                                   | iOS payments  | Free (Apple Developer account required) |
 
 **Setup steps:**
+
 1. Create Stripe account → get **Publishable** + **Secret** keys (test mode first)
 2. Add to API: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
 3. Add to mobile: `@stripe/stripe-react-native` + `EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY`
@@ -92,11 +93,11 @@ npm run dev:mobile
 
 ### C. Push notifications
 
-| Service | Purpose | Cost |
-|---------|---------|------|
+| Service                      | Purpose                     | Cost                  |
+| ---------------------------- | --------------------------- | --------------------- |
 | [Expo EAS](https://expo.dev) | Build + push infrastructure | Free tier, then usage |
-| **Apple Developer Program** | APNs for iOS | **$99/year** |
-| **Google Play Console** | FCM for Android | **$25 one-time** |
+| **Apple Developer Program**  | APNs for iOS                | **$99/year**          |
+| **Google Play Console**      | FCM for Android             | **$25 one-time**      |
 
 **Setup:** EAS project → `eas credentials` → enable push in Expo dashboard.
 
@@ -104,10 +105,10 @@ npm run dev:mobile
 
 ### D. App Store distribution
 
-| Platform | Requirement | Cost |
-|----------|-------------|------|
-| **iOS (TestFlight → App Store)** | Mac with Xcode OR **EAS Build** (cloud) | Apple Developer $99/yr |
-| **Android (Play Store)** | EAS Build → upload AAB | Google Play $25 one-time |
+| Platform                         | Requirement                             | Cost                     |
+| -------------------------------- | --------------------------------------- | ------------------------ |
+| **iOS (TestFlight → App Store)** | Mac with Xcode OR **EAS Build** (cloud) | Apple Developer $99/yr   |
+| **Android (Play Store)**         | EAS Build → upload AAB                  | Google Play $25 one-time |
 
 **Recommended:** [Expo EAS Build](https://docs.expo.dev/build/introduction/) — builds iOS on cloud without a Mac.
 
@@ -125,12 +126,12 @@ eas build --platform android
 
 Amazon Flex has **no official public API**. Production requires:
 
-| Component | Description | Who builds |
-|-----------|-------------|------------|
-| Reverse-engineered API endpoints | `GetOffers`, `AcceptOffer`, etc. | Your backend team (Phase 7) |
-| Session token capture | Secure WebView login in mobile app | Code scaffold exists (stub) |
-| Token encryption at rest | AES-256 / KMS | Backend env `ENCRYPTION_KEY` |
-| Residential proxy (optional) | Reduce ban risk near user's market | Services like Bright Data (~$10+/GB) |
+| Component                        | Description                        | Who builds                           |
+| -------------------------------- | ---------------------------------- | ------------------------------------ |
+| Reverse-engineered API endpoints | `GetOffers`, `AcceptOffer`, etc.   | Your backend team (Phase 7)          |
+| Session token capture            | Secure WebView login in mobile app | Code scaffold exists (stub)          |
+| Token encryption at rest         | AES-256 / KMS                      | Backend env `ENCRYPTION_KEY`         |
+| Residential proxy (optional)     | Reduce ban risk near user's market | Services like Bright Data (~$10+/GB) |
 
 **Risk:** Violates Amazon ToS — account deactivation possible. In-app disclaimer required.
 
@@ -138,10 +139,10 @@ Amazon Flex has **no official public API**. Production requires:
 
 ### F. Optional — Observability
 
-| Service | Purpose |
-|---------|---------|
-| [Sentry](https://sentry.io) | Crash + error tracking (mobile + API) |
-| [Datadog / Grafana Cloud](https://grafana.com) | Block engine latency metrics |
+| Service                                        | Purpose                               |
+| ---------------------------------------------- | ------------------------------------- |
+| [Sentry](https://sentry.io)                    | Crash + error tracking (mobile + API) |
+| [Datadog / Grafana Cloud](https://grafana.com) | Block engine latency metrics          |
 
 ---
 
@@ -163,22 +164,22 @@ Amazon Flex has **no official public API**. Production requires:
 
 ## Cost summary (rough monthly, production)
 
-| Item | Estimate |
-|------|----------|
-| Hosting (API + DB + Redis) | $20–80 |
-| Stripe fees | Per transaction |
-| Apple Developer | $8/mo (annualized) |
-| EAS (optional paid) | $0–29 |
-| Proxies (if used) | $50–200+ |
-| **Total MVP launch** | **~$50–150/mo** + store fees |
+| Item                       | Estimate                     |
+| -------------------------- | ---------------------------- |
+| Hosting (API + DB + Redis) | $20–80                       |
+| Stripe fees                | Per transaction              |
+| Apple Developer            | $8/mo (annualized)           |
+| EAS (optional paid)        | $0–29                        |
+| Proxies (if used)          | $50–200+                     |
+| **Total MVP launch**       | **~$50–150/mo** + store fees |
 
 ---
 
 ## Nothing else required from you for current MVP testing
 
-1. Install **Expo Go** on your phone  
-2. Copy `apps/mobile/.env.example` → `apps/mobile/.env` with your PC IP  
-3. Run `npm run dev:api` and `npm run dev:mobile`  
-4. Scan QR code  
+1. Install **Expo Go** on your phone
+2. Copy `apps/mobile/.env.example` → `apps/mobile/.env` with your PC IP
+3. Run `npm run dev:api` and `npm run dev:mobile`
+4. Scan QR code
 
 Code-side MVP is complete. Real payments, real Flex blocks, and store publishing need the external accounts above.

@@ -43,7 +43,12 @@ export const typography = {
   subtitle: { fontSize: 16, fontWeight: '500' as const },
   body: { fontSize: 15, fontWeight: '400' as const },
   caption: { fontSize: 12, fontWeight: '500' as const },
-  label: { fontSize: 11, fontWeight: '700' as const, letterSpacing: 1.2, textTransform: 'uppercase' as const },
+  label: {
+    fontSize: 11,
+    fontWeight: '700' as const,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase' as const,
+  },
 };
 
 export const APP_NAME = 'Thunder';

@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, ServiceUnavailableException, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  ServiceUnavailableException,
+  UseGuards,
+} from '@nestjs/common';
 import type { User } from '@thunder-spark/shared';
 import { ok } from '../../common/api-response';
 import { AuthGuard } from '../../common/auth.guard';
@@ -40,7 +47,9 @@ export class WalletController {
 
     const productId = this.dodoPaymentsService.getProductIdForAmount(body.amountCents);
     if (!productId) {
-      throw new ServiceUnavailableException('Unsupported amount. Allowed: 2500, 5000, 10000 cents.');
+      throw new ServiceUnavailableException(
+        'Unsupported amount. Allowed: 2500, 5000, 10000 cents.',
+      );
     }
 
     const session = await this.dodoPaymentsService.createCheckoutSession({
