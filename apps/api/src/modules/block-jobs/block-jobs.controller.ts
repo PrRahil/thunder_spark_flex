@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import type { User } from '@thunder-spark/shared';
 import { ok } from '../../common/api-response';
 import { AuthGuard } from '../../common/auth.guard';

@@ -13,9 +13,9 @@ export class DodoPaymentsService {
   isConfigured(): boolean {
     return Boolean(
       process.env.DODO_PAYMENTS_API_KEY &&
-        process.env.DODO_PRODUCT_ID_25 &&
-        process.env.DODO_PRODUCT_ID_50 &&
-        process.env.DODO_PRODUCT_ID_100,
+      process.env.DODO_PRODUCT_ID_25 &&
+      process.env.DODO_PRODUCT_ID_50 &&
+      process.env.DODO_PRODUCT_ID_100,
     );
   }
 
@@ -44,8 +44,7 @@ export class DodoPaymentsService {
         ? 'https://live.dodopayments.com'
         : 'https://test.dodopayments.com';
 
-    const returnUrl =
-      process.env.DODO_RETURN_URL ?? 'thunder://wallet?status=success';
+    const returnUrl = process.env.DODO_RETURN_URL ?? 'thunder://wallet?status=success';
     const idempotencyKey = randomUUID();
 
     const body = {

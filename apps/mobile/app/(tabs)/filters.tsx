@@ -67,16 +67,32 @@ export default function FiltersScreen() {
             </View>
             <Text style={styles.meta}>Locations: {f.locations.join(', ')}</Text>
             <Text style={styles.meta}>Dates: {f.dates.join(', ')}</Text>
-            {f.minWageCents ? <Text style={styles.meta}>Min wage: {formatCents(f.minWageCents)}</Text> : null}
+            {f.minWageCents ? (
+              <Text style={styles.meta}>Min wage: {formatCents(f.minWageCents)}</Text>
+            ) : null}
           </Card>
         ))}
 
         <Card style={styles.createCard}>
           <Text style={styles.createTitle}>Quick create</Text>
           <Input placeholder="Preset name" value={name} onChangeText={setName} />
-          <Input placeholder="Location code (e.g. DSE2)" value={location} onChangeText={setLocation} />
-          <Input placeholder="Min wage ($)" keyboardType="numeric" value={minWage} onChangeText={setMinWage} />
-          <Button title="Save filter" onPress={createFilter} loading={saving} style={{ marginTop: 8 }} />
+          <Input
+            placeholder="Location code (e.g. DSE2)"
+            value={location}
+            onChangeText={setLocation}
+          />
+          <Input
+            placeholder="Min wage ($)"
+            keyboardType="numeric"
+            value={minWage}
+            onChangeText={setMinWage}
+          />
+          <Button
+            title="Save filter"
+            onPress={createFilter}
+            loading={saving}
+            style={{ marginTop: 8 }}
+          />
         </Card>
       </ScrollView>
     </SafeAreaView>

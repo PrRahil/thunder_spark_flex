@@ -13,11 +13,11 @@ Thunder Spark Flex helps delivery drivers maximize earnings by automatically fin
 
 ### Key technical constraint (from research)
 
-| Platform | Background polling capability | Implication |
-|----------|------------------------------|-------------|
-| **iOS** | BGTaskScheduler: ~15 min minimum interval, ~30 sec max runtime; killed if user force-quits | Block engine **cannot** run reliably on-device |
-| **Android** | WorkManager + foreground service possible, but still inferior to server-side | Same conclusion for v1 |
-| **Server** | Sub-100 ms polling, 24/7, geo-distributed | **Block engine must run server-side** |
+| Platform    | Background polling capability                                                              | Implication                                    |
+| ----------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| **iOS**     | BGTaskScheduler: ~15 min minimum interval, ~30 sec max runtime; killed if user force-quits | Block engine **cannot** run reliably on-device |
+| **Android** | WorkManager + foreground service possible, but still inferior to server-side               | Same conclusion for v1                         |
+| **Server**  | Sub-100 ms polling, 24/7, geo-distributed                                                  | **Block engine must run server-side**          |
 
 The mobile app is the **control plane** (login, filters, wallet, start/stop, notifications). The **data plane** (high-frequency API polling + block reservation) runs on backend workers close to the user.
 
@@ -25,18 +25,18 @@ The mobile app is the **control plane** (login, filters, wallet, start/stop, not
 
 ## 2. Technology Stack
 
-| Layer | Choice | Rationale |
-|-------|--------|-----------|
-| **Mobile** | React Native + Expo (SDK 52+) | iOS-first with single codebase for Android; Stripe SDK; push notifications; EAS Build for App Store |
-| **Backend API** | NestJS (Node.js / TypeScript) | Modular architecture maps 1:1 to product modules; shared types with mobile |
-| **Block Engine** | NestJS worker + BullMQ | Isolated high-frequency polling jobs; horizontal scaling |
-| **Database** | PostgreSQL 16 | ACID for wallet ledger, user data, audit trail |
-| **Cache / Queue** | Redis 7 | Session tokens, rate limiting, job queues, hot block cache |
-| **Payments** | Stripe PaymentSheet | Wallet top-up; webhooks as source of truth |
-| **Push** | Expo Notifications + APNs | Block grabbed / wallet low / session expired |
-| **Auth (app users)** | JWT + refresh tokens | Standard mobile auth |
-| **Provider auth** | OAuth / token relay per provider | Amazon Flex session tokens (see §6) |
-| **Observability** | Structured logs + metrics (Prometheus/Grafana) | Latency SLO tracking for 50 ms grab target |
+| Layer                | Choice                                         | Rationale                                                                                           |
+| -------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Mobile**           | React Native + Expo (SDK 52+)                  | iOS-first with single codebase for Android; Stripe SDK; push notifications; EAS Build for App Store |
+| **Backend API**      | NestJS (Node.js / TypeScript)                  | Modular architecture maps 1:1 to product modules; shared types with mobile                          |
+| **Block Engine**     | NestJS worker + BullMQ                         | Isolated high-frequency polling jobs; horizontal scaling                                            |
+| **Database**         | PostgreSQL 16                                  | ACID for wallet ledger, user data, audit trail                                                      |
+| **Cache / Queue**    | Redis 7                                        | Session tokens, rate limiting, job queues, hot block cache                                          |
+| **Payments**         | Stripe PaymentSheet                            | Wallet top-up; webhooks as source of truth                                                          |
+| **Push**             | Expo Notifications + APNs                      | Block grabbed / wallet low / session expired                                                        |
+| **Auth (app users)** | JWT + refresh tokens                           | Standard mobile auth                                                                                |
+| **Provider auth**    | OAuth / token relay per provider               | Amazon Flex session tokens (see §6)                                                                 |
+| **Observability**    | Structured logs + metrics (Prometheus/Grafana) | Latency SLO tracking for 50 ms grab target                                                          |
 
 ### Why not Flutter or native Swift-only?
 
@@ -84,23 +84,26 @@ The mobile app is the **control plane** (login, filters, wallet, start/stop, not
 ## 4. Module Breakdown
 
 ### Module 1 — `packages/shared`
+
 Shared TypeScript types, Zod schemas, constants, error codes. Used by mobile and API.
 
 ### Module 2 — `apps/api` (NestJS)
+
 REST + WebSocket API. Sub-modules:
 
-| Sub-module | Responsibility |
-|------------|----------------|
-| **auth** | App user registration, login, JWT |
-| **users** | Profile, preferences |
-| **providers** | Connect Amazon Flex account, store encrypted session |
-| **filters** | CRUD filter presets (dates, times, locations, min wage) |
-| **wallet** | Balance, ledger, hold/charge/refund |
-| **payments** | Stripe PaymentIntent, webhooks |
-| **block-jobs** | Start/stop search; enqueue worker |
-| **notifications** | Push token registry, event dispatch |
+| Sub-module        | Responsibility                                          |
+| ----------------- | ------------------------------------------------------- |
+| **auth**          | App user registration, login, JWT                       |
+| **users**         | Profile, preferences                                    |
+| **providers**     | Connect Amazon Flex account, store encrypted session    |
+| **filters**       | CRUD filter presets (dates, times, locations, min wage) |
+| **wallet**        | Balance, ledger, hold/charge/refund                     |
+| **payments**      | Stripe PaymentIntent, webhooks                          |
+| **block-jobs**    | Start/stop search; enqueue worker                       |
+| **notifications** | Push token registry, event dispatch                     |
 
 ### Module 3 — `apps/block-engine` (Worker)
+
 Long-running BullMQ consumer per active user session:
 
 1. Load user filters + provider session from Redis
@@ -112,6 +115,7 @@ Long-running BullMQ consumer per active user session:
 7. Human-like jitter + backoff to reduce ban risk
 
 ### Module 4 — `packages/provider-amazon-flex`
+
 Provider adapter implementing `IProviderAdapter`:
 
 ```typescript
@@ -127,17 +131,18 @@ interface IProviderAdapter {
 Implementation uses reverse-engineered Flex endpoints; tokens obtained via secure in-app WebView login or token relay (see §6).
 
 ### Module 5 — `apps/mobile` (Expo)
+
 Screen map:
 
-| Screen | Purpose |
-|--------|---------|
-| **Welcome / Login** | Email + password for Thunder Spark account |
-| **Connect Provider** | Amazon Flex OAuth / WebView login |
-| **Filters** | Date, time, location, wage sliders |
-| **Wallet** | Balance, recharge (Stripe), transaction history |
-| **Dashboard** | Start / Stop button, live status, last grab |
-| **Notifications** | History of grabs, errors, refunds |
-| **Settings** | Provider disconnect, support, legal |
+| Screen               | Purpose                                         |
+| -------------------- | ----------------------------------------------- |
+| **Welcome / Login**  | Email + password for Thunder Spark account      |
+| **Connect Provider** | Amazon Flex OAuth / WebView login               |
+| **Filters**          | Date, time, location, wage sliders              |
+| **Wallet**           | Balance, recharge (Stripe), transaction history |
+| **Dashboard**        | Start / Stop button, live status, last grab     |
+| **Notifications**    | History of grabs, errors, refunds               |
+| **Settings**         | Provider disconnect, support, legal             |
 
 Foreground: WebSocket connection while "Running" for live status. Background: push notifications only (not polling).
 
@@ -193,11 +198,11 @@ Amazon Flex has **no public API** for block grabbing. Industry pattern (from rev
 
 ### Captcha handling
 
-| Strategy | When |
-|----------|------|
-| Pause job + push notification | Captcha detected in API response |
-| In-app WebView challenge | User completes captcha; new tokens relayed |
-| Rate limit backoff | HTTP 429 / anomaly signals |
+| Strategy                      | When                                       |
+| ----------------------------- | ------------------------------------------ |
+| Pause job + push notification | Captcha detected in API response           |
+| In-app WebView challenge      | User completes captcha; new tokens relayed |
+| Rate limit backoff            | HTTP 429 / anomaly signals                 |
 
 ### Anti-ban / human-like behavior
 
@@ -215,14 +220,15 @@ Amazon Flex has **no public API** for block grabbing. Industry pattern (from rev
 
 Double-entry inspired ledger (simplified):
 
-| Event | Debit | Credit |
-|-------|-------|--------|
-| Stripe top-up $50 | — | wallet +$50 |
-| Block grab fee | wallet −$9 | revenue +$9 |
-| Refund | revenue −$9 | wallet +$9 |
-| Failed grab (policy) | — | — (no charge) |
+| Event                | Debit       | Credit        |
+| -------------------- | ----------- | ------------- |
+| Stripe top-up $50    | —           | wallet +$50   |
+| Block grab fee       | wallet −$9  | revenue +$9   |
+| Refund               | revenue −$9 | wallet +$9    |
+| Failed grab (policy) | —           | — (no charge) |
 
 **Rules:**
+
 - Charge only on **confirmed** block acceptance
 - Holds placed before accept attempt; released on failure
 - All mutations idempotent with `idempotency_key`
@@ -262,32 +268,32 @@ Payment
 
 ## 9. API Surface (v1)
 
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/auth/register` | Create account |
-| POST | `/auth/login` | JWT access + refresh |
-| POST | `/providers/amazon-flex/connect` | Store session tokens |
-| GET | `/filters` | List presets |
-| POST | `/filters` | Create preset |
-| GET | `/wallet` | Balance + recent txns |
-| POST | `/wallet/recharge` | Create Stripe PaymentIntent |
-| POST | `/block-jobs/start` | Start search (body: filter_preset_id) |
-| POST | `/block-jobs/:id/stop` | Stop search |
-| GET | `/block-jobs/:id` | Status + metrics |
-| WS | `/ws/block-jobs/:id` | Live events |
-| POST | `/webhooks/stripe` | Stripe events |
+| Method | Path                             | Description                           |
+| ------ | -------------------------------- | ------------------------------------- |
+| POST   | `/auth/register`                 | Create account                        |
+| POST   | `/auth/login`                    | JWT access + refresh                  |
+| POST   | `/providers/amazon-flex/connect` | Store session tokens                  |
+| GET    | `/filters`                       | List presets                          |
+| POST   | `/filters`                       | Create preset                         |
+| GET    | `/wallet`                        | Balance + recent txns                 |
+| POST   | `/wallet/recharge`               | Create Stripe PaymentIntent           |
+| POST   | `/block-jobs/start`              | Start search (body: filter_preset_id) |
+| POST   | `/block-jobs/:id/stop`           | Stop search                           |
+| GET    | `/block-jobs/:id`                | Status + metrics                      |
+| WS     | `/ws/block-jobs/:id`             | Live events                           |
+| POST   | `/webhooks/stripe`               | Stripe events                         |
 
 ---
 
 ## 10. Non-Functional Requirements
 
-| Requirement | Target |
-|-------------|--------|
-| Grab latency (p95) | < 100 ms from block appearance to accept call |
-| API availability | 99.9% |
-| Wallet correctness | Zero double-charges (idempotency + DB constraints) |
-| Token security | Encrypted at rest, never logged, TTL enforced |
-| iOS App Store | Clear disclosure; no hidden automation of other apps without user consent |
+| Requirement        | Target                                                                    |
+| ------------------ | ------------------------------------------------------------------------- |
+| Grab latency (p95) | < 100 ms from block appearance to accept call                             |
+| API availability   | 99.9%                                                                     |
+| Wallet correctness | Zero double-charges (idempotency + DB constraints)                        |
+| Token security     | Encrypted at rest, never logged, TTL enforced                             |
+| iOS App Store      | Clear disclosure; no hidden automation of other apps without user consent |
 
 ---
 
@@ -310,18 +316,18 @@ Payment
 
 ## 12. Build Phases (Module Order)
 
-| Phase | Module | Deliverable |
-|-------|--------|-------------|
-| **0** | Monorepo + shared types | Build passes, types shared |
-| **1** | API skeleton + auth | Register/login works |
-| **2** | Mobile shell + navigation | iOS simulator runs |
-| **3** | Filters CRUD | Mobile ↔ API |
-| **4** | Wallet + Stripe | Recharge flow |
-| **5** | Provider connect (stub) | Session storage |
-| **6** | Block engine (stub) | Start/stop job lifecycle |
-| **7** | Amazon Flex adapter | Real API integration |
-| **8** | Captcha + anti-ban | Production hardening |
-| **9** | Android build | EAS Android profile |
+| Phase | Module                    | Deliverable                |
+| ----- | ------------------------- | -------------------------- |
+| **0** | Monorepo + shared types   | Build passes, types shared |
+| **1** | API skeleton + auth       | Register/login works       |
+| **2** | Mobile shell + navigation | iOS simulator runs         |
+| **3** | Filters CRUD              | Mobile ↔ API               |
+| **4** | Wallet + Stripe           | Recharge flow              |
+| **5** | Provider connect (stub)   | Session storage            |
+| **6** | Block engine (stub)       | Start/stop job lifecycle   |
+| **7** | Amazon Flex adapter       | Real API integration       |
+| **8** | Captcha + anti-ban        | Production hardening       |
+| **9** | Android build             | EAS Android profile        |
 
 ---
 

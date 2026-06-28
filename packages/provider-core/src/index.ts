@@ -20,7 +20,9 @@ export function scoreBlock(block: DeliveryBlock, filter: FilterPreset): number {
   const blockDate = block.startTime.slice(0, 10);
   if (filter.dates.includes(blockDate)) score += 5000;
 
-  if (filter.locations.some((loc) => block.locationName.toLowerCase().includes(loc.toLowerCase()))) {
+  if (
+    filter.locations.some((loc) => block.locationName.toLowerCase().includes(loc.toLowerCase()))
+  ) {
     score += 3000;
   }
 
@@ -39,10 +41,7 @@ export function scoreBlock(block: DeliveryBlock, filter: FilterPreset): number {
   return score;
 }
 
-export function pickBestBlock(
-  blocks: DeliveryBlock[],
-  filter: FilterPreset,
-): DeliveryBlock | null {
+export function pickBestBlock(blocks: DeliveryBlock[], filter: FilterPreset): DeliveryBlock | null {
   if (blocks.length === 0) return null;
   return blocks.reduce((best, current) =>
     scoreBlock(current, filter) > scoreBlock(best, filter) ? current : best,

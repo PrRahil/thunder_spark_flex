@@ -1,13 +1,6 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -42,7 +35,10 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.flex}
+      >
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <LinearGradient colors={['#1A1400', colors.bg]} style={styles.hero}>
             <View style={styles.logoRow}>
@@ -68,7 +64,12 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button title="Sign in" onPress={handleLogin} loading={loading} style={{ marginTop: spacing.sm }} />
+            <Button
+              title="Sign in"
+              onPress={handleLogin}
+              loading={loading}
+              style={{ marginTop: spacing.sm }}
+            />
             <Link href="/(auth)/register" asChild>
               <Text style={styles.link}>Create an account</Text>
             </Link>
@@ -96,5 +97,11 @@ const styles = StyleSheet.create({
   sub: { color: colors.textSecondary, fontSize: 14, marginTop: 8, lineHeight: 20 },
   form: { gap: 12 },
   error: { color: colors.error, fontSize: 14 },
-  link: { color: colors.primary, textAlign: 'center', marginTop: spacing.md, fontSize: 15, fontWeight: '600' },
+  link: {
+    color: colors.primary,
+    textAlign: 'center',
+    marginTop: spacing.md,
+    fontSize: 15,
+    fontWeight: '600',
+  },
 });

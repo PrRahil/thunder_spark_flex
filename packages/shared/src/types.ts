@@ -1,8 +1,4 @@
-import type {
-  BlockJobStatus,
-  ProviderId,
-  WalletTxnType,
-} from './constants';
+import type { BlockJobStatus, ProviderId, WalletTxnType } from './constants';
 
 export interface User {
   id: string;

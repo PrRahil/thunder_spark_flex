@@ -5,7 +5,10 @@ import { clearSession, loadSession, saveSession } from '@/lib/auth-storage';
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
-  signIn: (user: User, tokens: { accessToken: string; refreshToken: string; expiresIn: number }) => Promise<void>;
+  signIn: (
+    user: User,
+    tokens: { accessToken: string; refreshToken: string; expiresIn: number },
+  ) => Promise<void>;
   signOut: () => Promise<void>;
 }
 

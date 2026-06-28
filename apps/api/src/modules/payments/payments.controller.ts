@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  HttpCode,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, Post, Req } from '@nestjs/common';
 import { Webhook } from 'standardwebhooks';
 import { ok } from '../../common/api-response';
 import { WalletService } from '../wallet/wallet.service';
-import { DodoPaymentsService } from './dodo-payments.service';
 
 interface DodoWebhookPayload {
   type: string;

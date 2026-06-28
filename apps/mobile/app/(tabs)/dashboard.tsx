@@ -120,7 +120,8 @@ export default function DashboardScreen() {
               <View style={{ flex: 1 }}>
                 <Text style={styles.grabbedTitle}>Block grabbed!</Text>
                 <Text style={styles.grabbedText}>
-                  {formatCents(activeJob.grabbedBlock.wageCents)} · {activeJob.grabbedBlock.locationName}
+                  {formatCents(activeJob.grabbedBlock.wageCents)} ·{' '}
+                  {activeJob.grabbedBlock.locationName}
                 </Text>
               </View>
             </View>

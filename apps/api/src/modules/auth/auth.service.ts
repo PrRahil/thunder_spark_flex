@@ -1,10 +1,6 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcryptjs';
-import { createHash, randomBytes } from 'crypto';
+import { createHash } from 'crypto';
 import type { AuthTokens, User } from '@thunder-spark/shared';
 import { loginSchema, registerSchema } from '@thunder-spark/shared';
 import { InMemoryStore } from '../../store/in-memory.store';

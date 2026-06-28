@@ -1,5 +1,14 @@
 import type { ReactNode } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View, type TextInputProps, type ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  type TextInputProps,
+  type ViewStyle,
+} from 'react-native';
 import { colors, radius } from '@/constants/theme';
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
@@ -13,7 +22,14 @@ interface ButtonProps {
   style?: ViewStyle;
 }
 
-export function Button({ title, onPress, loading, disabled, variant = 'primary', style }: ButtonProps) {
+export function Button({
+  title,
+  onPress,
+  loading,
+  disabled,
+  variant = 'primary',
+  style,
+}: ButtonProps) {
   const variantStyle = {
     primary: styles.primary,
     secondary: styles.secondary,
@@ -66,7 +82,13 @@ export function ScreenHeader({ title, subtitle }: { title: string; subtitle?: st
   );
 }
 
-export function Badge({ label, tone = 'default' }: { label: string; tone?: 'default' | 'success' | 'warning' | 'error' }) {
+export function Badge({
+  label,
+  tone = 'default',
+}: {
+  label: string;
+  tone?: 'default' | 'success' | 'warning' | 'error';
+}) {
   const toneStyle = {
     default: styles.badgeDefault,
     success: styles.badgeSuccess,
